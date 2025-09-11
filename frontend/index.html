@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FootballHub</title>
+  <link rel="shortcut icon" href="./css/logo.png" type="image/x-icon">
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/main.js" defer></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white shadow-md">
+    <div class="container w-full max-w-[1400px] mx-auto px-4 py-4 flex justify-between items-center">
+      <!-- Logo / Site name -->
+      <a href="index.html" class="text-2xl font-bold text-white">Football<span style="color: rgb(255, 187, 1);">Hub</span></a>
+      <!-- Navigation -->
+      <nav class="space-x-6 hidden md:flex">
+        <a href="#" class="hover:text-orange-300   transition">Home</a>
+        <a href="#" class="hover:text-orange-300   transition">Live Matches</a>
+        <a href="#" class="hover:text-orange-300   transition">Schedule</a>
+        <a href="#" class="hover:text-orange-300   transition">Contact</a>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile menu (hidden by default) -->
+  <nav id="mobile-menu" class="bg-white shadow-md hidden px-4 py-2 md:hidden">
+    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Home</a>
+    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Live Matches</a>
+    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Schedule</a>
+    <a href="#" class="block py-2 hover:text-blue-600">Contact</a>
+  </nav>
+
+<!-- search bar -->
+<form id="searchForm" 
+      class="flex flex-col sm:flex-row items-center justify-center gap-2 mt-12 mb-12 w-full px-4">
+  
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search country or team..."
+    class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
+  />
+
+  <button
+    type="submit"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full sm:w-auto">
+    Search
+  </button>
+</form>
+
+
+<div class="container mx-auto px-4 py-6">
+    <h2 class="text-2xl font-bold mb-4">Live Matches</h2>
+    <div class="overflow-x-auto">
+    <table class="min-w-full border border-gray-200 rounded-md shadow-md">
+     <thead>
+      <tr class="bg-blue-700 text-white">
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-left">League</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-left">Team 1</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-left">Team 2</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-left">Date</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-center">Status</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-center">Minute</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-center">Score</th>
+          <th class="py-3 px-6 bg-blue-600 font-semibold text-center">Venue</th>
+       </tr>
+        </thead>
+        <tbody id="matchesTableBody" style="height: auto;" class="">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const btn = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
