@@ -22,14 +22,44 @@
 - **Backend:** Node.js, Express.js  
 - **API:** Football API via RapidAPI  
 - **Caching:** Redis (for live matches and team fixtures)  
-- **Frontend:** Vanilla JS  
+- **Frontend:** vanilla js 
 - **Database:** Redis (currently only caching; could extend to persistent DB later)  
 
 ---
 
 ## ⚡ Installation
 
-1. **Clone the repository:**
+1. **Clone the repository**
 ```bash
 git clone https://github.com/Hemdi2004/FootballHub.git
 cd FootballHub
+```
+2. **Install dependencies**
+```bash
+
+npm install
+```
+3. **Set up environment variables**  
+Create a `.env` file in the root and add your keys:
+
+```env
+API_FOOTBALL_KEY=your_rapidapi_key
+REDIS_URL=redis://default:your_redis_password@your_redis_host:port
+```
+4. **Run the server**
+
+```bash
+
+npm start
+
+```
+**🗄 Caching & API Quota Management**
+
+Live matches and team fixtures are cached in Redis to reduce API requests.
+
+TTL (time-to-live) for cached data: 24 hours.
+
+Redis ensures data persists even if the server is restarted.
+
+Cache is automatically used if available, reducing the need for repeated API calls.
+
