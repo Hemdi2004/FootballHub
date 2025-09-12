@@ -4,6 +4,18 @@ dotenv.config();
 import express from 'express';
 import axios from 'axios';
 import cors from 'cors';
+import { createClient } from "redis";
+
+const redisClient = createClient({
+  url: process.env.REDIS_URL
+});
+
+redisClient.on("error", (err) => console.error("Redis Client Error", err));
+
+await redisClient.connect();
+console.log("✅ Connected to Redis");
+
+
 
 const app = express();
 app.use(cors());
@@ -13,6 +25,18 @@ const API_HEADERS = {
   'x-rapidapi-key': process.env.API_FOOTBALL_KEY,
   'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
 };
+
+// Cache for live matches
+let liveCache = {
+  data: null,
+  timestamp: 0
+};
+
+const LIVE_CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+// Cache key & duration
+const CACHE_KEY = "live_matches";
+const LIVE_CACHE_DURATION_IN_SECONDS = 24 * 60 * 60; // 24 hours in seconds
 
 
 // Cache structure: { [teamId]: { data: [...], timestamp: ms } }
@@ -70,17 +94,43 @@ async function fetchFixturesByTeamId(teamId) {
 
 // Fetch live matches (all leagues)
 async function fetchLiveMatches() {
+  // 1️⃣ Try to get from Redis
+  const cached = await redisClient.get(CACHE_KEY);
+  if (cached) {
+    console.log("⚡ Serving live matches from Redis cache");
+    return JSON.parse(cached);
+  }
+
   try {
+    // 2️⃣ Fetch fresh data from API
     const response = await axios.get(
       "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all",
       { headers: API_HEADERS }
     );
-    return response.data.response;
+    let matches = response.data.response;
+
+    // Fallback to today's fixtures if no live ones
+    // if (!matches || matches.length === 0) {
+    //   const today = new Date().toISOString().split("T")[0];
+    //   const fallback = await axios.get(
+    //     `https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${today}`,
+    //     { headers: API_HEADERS }
+    //   );
+    //   matches = fallback.data.response;
+    // }
+
+    // 3️⃣ Cache in Redis for 24h
+    await redisClient.setEx(CACHE_KEY, 24 * 60 * 60, JSON.stringify(matches));
+    console.log("⚡ Fetched fresh live matches and cached in Redis");
+
+    return matches;
+
   } catch (error) {
     console.error("Error fetching live matches:", error.response?.data || error.message);
-    return [];
+    return []; // fallback empty array
   }
 }
+
 
 app.get("/live", async (req, res) => {
   const matches = await fetchLiveMatches();
@@ -96,134 +146,41 @@ app.get('/matches', async (req, res) => {
     return res.status(400).json({ error: 'Please provide a search query' });
   }
 
-  // 1. Get team ID
-  const teamId = await getTeamIdByName(query);
-  if (!teamId) {
-    return res.status(404).json({ error: 'Team not found' });
-  }
+  const cacheKey = `matches:${query.toLowerCase()}`;
 
-  // 2. Fetch fixtures for that team
-  const fixtures = await fetchFixturesByTeamId(teamId);
-  if (!fixtures) {
-    return res.status(500).json({ error: 'Failed to fetch fixtures' });
-  }
+  try {
+    // 1️⃣ Check Redis cache first
+    const cached = await redisClient.get(cacheKey);
+    if (cached) {
+      console.log(`⚡ Serving matches for "${query}" from cache`);
+      return res.json(JSON.parse(cached));
+    }
 
-  // 3. Return fixtures as JSON
-  res.json(fixtures);
+    // 2️⃣ Get team ID (API call)
+    const teamId = await getTeamIdByName(query);
+    if (!teamId) {
+      return res.status(404).json({ error: 'Team not found' });
+    }
+
+    // 3️⃣ Fetch fixtures by team ID (API call)
+    const fixtures = await fetchFixturesByTeamId(teamId);
+    if (!fixtures) {
+      return res.status(500).json({ error: 'Failed to fetch fixtures' });
+    }
+
+    // 4️⃣ Cache results in Redis for 24 hours (86400 seconds)
+    await redisClient.setEx(cacheKey, 86400, JSON.stringify(fixtures));
+
+    console.log(`✅ Cached matches for "${query}" in Redis`);
+    res.json(fixtures);
+
+  } catch (error) {
+    console.error("Error in /matches endpoint:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
-
-
-// the second way @
-// async function searchFixturesByTeamName(name) {
-//   // 1. Get team ID
-//   const teamRes = await fetch(`https://api-football-v1.p.rapidapi.com/v3/teams?search=${name}`, {
-//     headers: {
-//       'x-rapidapi-key': API_KEY,
-//       'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
-//     }
-//   });
-//   const teamJson = await teamRes.json();
-//   const teamId = teamJson.response[0]?.team.id;
-//   if (!teamId) return console.error('Team not found');
-
-//   // 2. Get fixtures
-//   const fixturesRes = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?team=${teamId}&season=2025`, {
-//     headers: {
-//       'x-rapidapi-key': API_KEY,
-//       'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
-//     }
-//   });
-//   const fixturesJson = await fixturesRes.json();
-//   console.log(fixturesJson);
-// }
-
-
-
-
-
-// const API_URL = "https://api-football-v1.p.rapidapi.com/v3/fixtures?season=2025&team=${teamId}";
-// const API_HEADERS = {
-//   'x-rapidapi-key': process.env.API_FOOTBALL_KEY,
-//   'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
-// };
-
-// app.use(cors());
-
-// let cachedMatches = null;
-// let lastFetchTime = 0;
-// const CACHE_DURATION = 60 * 1000; // 1 minute
-
-// async function fetchMatches() {
-//   const now = Date.now();
-
-//   if (cachedMatches && (now - lastFetchTime) < CACHE_DURATION) {
-//     return cachedMatches;
-//   }
-
-//   try {
-//     const response = await axios.get(API_URL, { headers: API_HEADERS });
-
-//     cachedMatches = response.data.response; // API-Sports stores matches in .response
-//     console.log(response.data.response); // testing the response
-//     lastFetchTime = now;
-//     console.log('Fetched fresh data at', new Date().toLocaleTimeString());
-//     return cachedMatches;
-
-//   } catch (error) {
-//     console.error('Error fetching matches:', error.response?.data || error.message);
-//     return cachedMatches;
-//   }
-// }
-
-
-// app.get('/matches', async (req, res) => {
-//   const matches = await fetchMatches();
-
-//   if (!matches) {
-//     return res.status(500).json({ error: 'Unable to fetch matches right now' });
-//   }
-
-//   const userInput = req.query.query || ''; // get search input from query string
-
-//   if (!userInput) {
-//     // No filter, return an error
-//     return res.status(400).json({ error: 'Please provide a search query' });
-//   }
-
-//   const filteredMatches = filterMatches(matches, userInput);
-
-//   res.json(filteredMatches);
-// });
-
-
-// // filtering logic
-
-// function filterMatches(matches, query) {
-//   const q = query.toLowerCase().trim();
-  
-//   // Check if query looks like a date (YYYY-MM-DD)
-//   const isDate = /^\d{4}-\d{2}-\d{2}$/.test(q);
-
-//   return matches.filter(match => {
-//     if (isDate) {
-//       // filter by fixture date slice(0,10)
-//       return match.fixture.date.slice(0,10) === q;
-//     } else {
-//       // filter by country OR home team OR away team includes q
-//       const country = (match.league.country || '').toLowerCase();
-//       const home = (match.teams.home.name || '').toLowerCase();
-//       const away = (match.teams.away.name || '').toLowerCase();
-
-//       return country.includes(q) || home.includes(q) || away.includes(q);
-//     }
-//   });
-// }
-
-// app.listen(PORT, () => {
-//   console.log(`Backend server running on http://localhost:${PORT}`);
-// });
