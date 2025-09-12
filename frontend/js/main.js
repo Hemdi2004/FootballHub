@@ -430,7 +430,7 @@ const defaultMatches = [
 document.addEventListener("DOMContentLoaded", async () => {
   // Instead of showing static defaultMatches, fetch live ones
   const liveMatches = await fetchLiveMatches();
-  console.log(liveMatches)
+  
   if (liveMatches.length > 0) {
     populateTable(liveMatches);
   } else {
@@ -537,33 +537,6 @@ function populateTable(matches) {
       tableBody.appendChild(row);
     });
   });
-
-
-  // tableBody.innerHTML = matches.map(match => `
-  //     <tr class="border-b hover:bg-gray-100 cursor-pointer h-20" onclick="location.href='match1.html'" >
-  //            <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${match.league.name}</td>
-  //           <td class="py-3 px-6 whitespace-nowrap">
-  //          <div class="flex items-center gap-3">
-  //            <img src="${match.teams.home.logo}"
-  //                 alt="${match.teams.home.name}"
-  //                 class="w-12 h-12 object-contain flex-shrink-0" />
-  //            <span>${match.teams.home.name}</span>
-  //          </div>
-  //        </td>
-  //            <td class="py-3 px-6 whitespace-nowrap">
-  //          <div class="flex items-center gap-3">
-  //            <img src="${match.teams.away.logo}"
-  //                 alt="${match.teams.away.name}"
-  //                 class="w-12 h-12 object-contain flex-shrink-0" />
-  //            <span>${match.teams.away.name}</span>
-  //          </div>
-  //        </td>
-  //           <td class="py-3 px-6 text-center text-green-600 font-semibold whitespace-nowrap">${match.fixture.status.long}</td>
-  //           <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${renderMinutes(match.fixture.status)}</td>
-  //           <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${getMatchScore(match.score)}</td>
-  //           <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${match.fixture.venue.name}</td>
-  //      </tr>
-  // `).join("");
 }
 function formatMatchDate(isoString) {
   const dateObj = new Date(isoString);
