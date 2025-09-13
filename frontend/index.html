@@ -17,9 +17,9 @@
       <a href="index.html" class="text-2xl font-bold text-white">Football<span style="color: rgb(255, 187, 1);">Hub</span></a>
       <!-- Navigation -->
       <nav class="space-x-6 hidden md:flex">
-        <a href="#" class="hover:text-orange-300   transition">Home</a>
-        <a href="#" class="hover:text-orange-300   transition">Live Matches</a>
-        <a href="#" class="hover:text-orange-300   transition">Schedule</a>
+        <a href="#" data-action="home" class="nav-home hover:text-orange-300   transition">Home</a>
+        <a href="#" data-action="live" class="nav-live hover:text-orange-300   transition">Live Matches</a>
+        <a href="#" data-action="schedule" class="nav-schedule hover:text-orange-300   transition">Schedule</a>
         <a href="#" class="hover:text-orange-300   transition">Contact</a>
       </nav>
 
@@ -34,9 +34,9 @@
 
   <!-- Mobile menu (hidden by default) -->
   <nav id="mobile-menu" class="bg-white shadow-md hidden px-4 py-2 md:hidden">
-    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Home</a>
-    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Live Matches</a>
-    <a href="#" class="block py-2 border-b border-gray-200 hover:text-blue-600">Schedule</a>
+    <a href="#" data-action="home" class="nav-home block py-2 border-b border-gray-200 hover:text-blue-600">Home</a>
+    <a href="#" data-action="live" class="nav-live block py-2 border-b border-gray-200 hover:text-blue-600">Live Matches</a>
+    <a href="#" data-action="schedule" class="nav-schedule block py-2 border-b border-gray-200 hover:text-blue-600">Schedule</a>
     <a href="#" class="block py-2 hover:text-blue-600">Contact</a>
   </nav>
 
@@ -60,7 +60,7 @@
 
 
 <div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold mb-4">Todaye's matches</h2>
+    <h2 class="text-2xl font-bold mb-4">Today's matches</h2>
     <div class="overflow-x-auto">
     <table class="min-w-full border border-gray-200 rounded-md shadow-md">
      <thead>

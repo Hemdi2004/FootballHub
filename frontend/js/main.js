@@ -1,505 +1,111 @@
-const form = document.getElementById('searchForm');
-const searchInput = document.getElementById('searchInput');
-const tableBody = document.getElementById('matchesTableBody');
-const defaultMatches = [
-  {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  },
-   {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  },
-   {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  },
-   {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  },
-   {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  },
-   {
-    "fixture": {
-      "id": 1377400,
-      "referee": "João Pedro Silva Pinheiro",
-      "timezone": "UTC",
-      "date": "2025-08-13T19:00:00+00:00",
-      "timestamp": 1755111600,
-      "periods": {
-        "first": null,
-        "second": null
-      },
-      "venue": {
-        "id": 20416,
-        "name": "Bluenergy Stadium",
-        "city": "Udine"
-      },
-      "status": {
-        "long": "Not Started",
-        "short": "NS",
-        "elapsed": null,
-        "extra": null
-      }
-    },
-    "league": {
-      "id": 531,
-      "name": "UEFA Super Cup",
-      "country": "World",
-      "logo": "https://media.api-sports.io/football/leagues/531.png",
-      "flag": null,
-      "season": 2025,
-      "round": "Final",
-      "standings": false
-    },
-    "teams": {
-      "home": {
-        "id": 85,
-        "name": "Paris Saint Germain",
-        "logo": "https://media.api-sports.io/football/teams/85.png",
-        "winner": null
-      },
-      "away": {
-        "id": 47,
-        "name": "Tottenham",
-        "logo": "https://media.api-sports.io/football/teams/47.png",
-        "winner": null
-      }
-    },
-    "goals": {
-      "home": null,
-      "away": null
-    },
-    "score": {
-      "halftime": {
-        "home": null,
-        "away": null
-      },
-      "fulltime": {
-        "home": null,
-        "away": null
-      },
-      "extratime": {
-        "home": null,
-        "away": null
-      },
-      "penalty": {
-        "home": null,
-        "away": null
-      }
-    }
-  }
-];
+const form = document.getElementById("searchForm");
+const searchInput = document.getElementById("searchInput");
+const tableBody = document.getElementById("matchesTableBody");
 
 
-// when the DOM contents loaded
-
+// ---------------- INIT ----------------
 document.addEventListener("DOMContentLoaded", async () => {
-  // Instead of showing static defaultMatches, fetch live ones
-  const liveMatches = await fetchLiveMatches();
-  
-  if (liveMatches.length > 0) {
-    populateTable(liveMatches);
-  } else {
-    populateTable(defaultMatches); // fallback if no live games
+  // Load today's matches on first open
+  const todayMatches = await loadToday();
+  if (!todayMatches || todayMatches.length === 0) {
+    populateTable(defaultMatches); // fallback only if nothing comes back
   }
 
-  // search form handler stays the same
+  document.addEventListener("click", (e) => {
+  const action = e.target.dataset.action;
+  if (!action) return;
+
+  e.preventDefault();
+
+  if (action === "home") loadToday();
+  if (action === "live") loadLive();
+  if (action === "schedule") loadSchedule();
+});
+
+
+  // Search form handler
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const teamName = searchInput.value.trim();
     if (!teamName) return;
 
     const matches = await fetchMatches(teamName);
-    const sortedMatches = matches.sort((a, b) => a.fixture.timestamp - b.fixture.timestamp);
+    const sortedMatches = matches.sort(
+      (a, b) => a.fixture.timestamp - b.fixture.timestamp
+    );
     populateTable(sortedMatches);
   });
 });
 
-
-
+// ---------------- FETCH HELPERS ----------------
 async function fetchMatches(query) {
-  // If the query is empty, don't bother making a network request.
-  if (!query) {
-    return []; // Return an empty array to clear the table.
-  }
+  if (!query) return [];
 
   try {
-    const response = await fetch(`http://localhost:4000/matches?query=${encodeURIComponent(query)}`);
-    
-    // Check if the request was successful
-    if (!response.ok) {
-      // Throw an error to be caught by the catch block
-      throw new Error(`Network response was not ok: ${response.statusText}`);
-    }
-    
-    // Parse the JSON data and return it
-    const matches = await response.json();
-    return matches;
-
-  } catch (error) {
-    console.error('Error fetching matches:', error);
-    // Return an empty array on error so the app doesn't crash.
-    return []; 
-  }
-}
-
-async function fetchLiveMatches() {
-  try {
-    const response = await fetch("http://localhost:4000/live");
-    if (!response.ok) throw new Error("Failed to fetch live matches");
+    const response = await fetch(
+      `http://localhost:4000/matches?query=${encodeURIComponent(query)}`
+    );
+    if (!response.ok) throw new Error("Failed to fetch team matches");
     return await response.json();
   } catch (error) {
-    console.error("Error fetching live matches:", error);
+    console.error("Error fetching matches:", error);
     return [];
   }
 }
 
+async function loadToday() {
+  try {
+    const res = await fetch("http://localhost:4000/today");
+    if (!res.ok) throw new Error("Failed to fetch today's matches");
+    const matches = await res.json();
+    populateTable(matches);
+    return matches;
+  } catch (err) {
+    console.error("Error in loadToday:", err);
+    return [];
+  }
+}
 
+async function loadLive() {
+  try {
+    const res = await fetch("http://localhost:4000/live");
+    if (!res.ok) throw new Error("Failed to fetch live matches");
+    const matches = await res.json();
+    populateTable(matches);
+    return matches;
+  } catch (err) {
+    console.error("Error in loadLive:", err);
+    return [];
+  }
+}
 
+async function loadSchedule() {
+  try {
+    const res = await fetch("http://localhost:4000/schedule");
+    if (!res.ok) throw new Error("Failed to fetch schedule");
+    const matches = await res.json();
+    populateTable(matches);
+    return matches;
+  } catch (err) {
+    console.error("Error in loadSchedule:", err);
+    return [];
+  }
+}
+
+// ---------------- RENDERING ----------------
 function populateTable(matches) {
+  if (!matches || matches.length === 0) {
+    tableBody.innerHTML =
+      '<tr><td colspan="10" class="text-center py-4 text-gray-500">No matches available</td></tr>';
+    return;
+  }
+
   const grouped = groupMatchesByLeague(matches);
+  tableBody.innerHTML = "";
 
-  tableBody.innerHTML = '';
-  
-
-
-    Object.keys(grouped).forEach(leagueKey => {
-    // League header row
-    const headerRow = document.createElement('tr');
+  Object.keys(grouped).forEach((leagueKey) => {
+    // League header
+    const headerRow = document.createElement("tr");
     headerRow.innerHTML = `
       <td colspan="10" class="bg-gray-100 font-bold py-2 px-6 text-left">
         ${leagueKey}
@@ -507,82 +113,75 @@ function populateTable(matches) {
     `;
     tableBody.appendChild(headerRow);
 
-    // Matches rows
-    grouped[leagueKey].forEach(match => {
-      const row = document.createElement('tr');
-      row.className = "border-b hover:bg-blue-100 cursor-pointer h-20 ";
-      row.onclick = () => { location.href = 'index.html'; };
+    // Matches
+    grouped[leagueKey].forEach((match) => {
+      const row = document.createElement("tr");
+      row.className = "border-b hover:bg-blue-100 cursor-pointer h-20";
+      row.onclick = () => {
+        location.href = "index.html";
+      };
 
       row.innerHTML = `
-        <td class="py-3 px-6 text-center text-green-600 font-semibold whitespace-nowrap"><img src="${match.league.logo}" alt="league-logo" class="w-8 h-8 object-contain flex-shrink-0"/></td>
+        <td class="py-3 px-6 text-center"><img src="${match.league.logo}" alt="league-logo" class="w-8 h-8 object-contain"/></td>
         <td class="py-3 px-6 whitespace-nowrap">
           <div class="flex items-center gap-3">
-            <img src="${match.teams.home.logo}" alt="${match.teams.home.name}" class="w-12 h-12 object-contain flex-shrink-0" />
+            <img src="${match.teams.home.logo}" alt="${match.teams.home.name}" class="w-12 h-12 object-contain" />
             <span>${match.teams.home.name}</span>
           </div>
         </td>
         <td class="py-3 px-6 whitespace-nowrap">
           <div class="flex items-center gap-3">
-            <img src="${match.teams.away.logo}" alt="${match.teams.away.name}" class="w-12 h-12 object-contain flex-shrink-0" />
+            <img src="${match.teams.away.logo}" alt="${match.teams.away.name}" class="w-12 h-12 object-contain" />
             <span>${match.teams.away.name}</span>
           </div>
         </td>
-        <td class="py-3 px-6 text-center text-green-600 font-semibold whitespace-nowrap">${formatMatchDate(match.fixture.date)}</td>
-        <td class="py-3 px-6 text-center text-green-600 font-semibold whitespace-nowrap">${match.fixture.status.long}</td>
-        <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${renderMinutes(match.fixture.status)}</td>
-        <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${getMatchScore(match.score)}</td>
-        <td class="py-3 px-6 text-center font-bold whitespace-nowrap">${match.fixture.venue?.name || '-'}</td>
+        <td class="py-3 px-6 text-center">${formatMatchDate(match.fixture.date)}</td>
+        <td class="py-3 px-6 text-center">${match.fixture.status.long}</td>
+        <td class="py-3 px-6 text-center font-bold">${renderMinutes(match.fixture.status)}</td>
+        <td class="py-3 px-6 text-center font-bold">${getMatchScore(match.score)}</td>
+        <td class="py-3 px-6 text-center">${match.fixture.venue?.name || "-"}</td>
       `;
-
       tableBody.appendChild(row);
     });
   });
 }
+
+// ---------------- UTILITIES ----------------
 function formatMatchDate(isoString) {
   const dateObj = new Date(isoString);
-
-  const day = dateObj.getDate().toString().padStart(2, '0');
-  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // 0-indexed
+  const day = dateObj.getDate().toString().padStart(2, "0");
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
   const year = dateObj.getFullYear();
-  const hours = dateObj.getHours().toString().padStart(2, '0');
-  const minutes = dateObj.getMinutes().toString().padStart(2, '0');
-
+  const hours = dateObj.getHours().toString().padStart(2, "0");
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
-
 function getMatchScore(score) {
-  if (score.penalty.home !== null || score.penalty.away !== null) {
+  if (score.penalty.home != null || score.penalty.away != null) {
     return `${score.penalty.home} - ${score.penalty.away} (PEN)`;
-  } else if (score.extratime.home !== null || score.extratime.away !== null) {
+  } else if (score.extratime.home != null || score.extratime.away != null) {
     return `${score.extratime.home} - ${score.extratime.away} (ET)`;
-  } else if (score.fulltime.home !== null || score.fulltime.away !== null) {
+  } else if (score.fulltime.home != null || score.fulltime.away != null) {
     return `${score.fulltime.home} - ${score.fulltime.away}`;
-  } else if (score.halftime.home !== null || score.halftime.away !== null) {
+  } else if (score.halftime.home != null || score.halftime.away != null) {
     return `${score.halftime.home} - ${score.halftime.away} (HT)`;
   }
-  return "—"; // No score yet
+  return "—";
 }
 
 function renderMinutes(status) {
-  if (status.elapsed == null) return "-"; // match not started yet
-
-  if (status.extra != null) {
-    return `${status.elapsed}+${status.extra}'`;
-  }
-  return `${status.elapsed}'`;
+  if (status.elapsed == null) return "-";
+  return status.extra != null
+    ? `${status.elapsed}+${status.extra}'`
+    : `${status.elapsed}'`;
 }
 
 function groupMatchesByLeague(matches) {
-  const grouped = {};
-
-  matches.forEach(match => {
+  return matches.reduce((acc, match) => {
     const leagueKey = `${match.league.country} - ${match.league.name}`;
-    if (!grouped[leagueKey]) grouped[leagueKey] = [];
-    grouped[leagueKey].push(match);
-  });
-
-  return grouped;
+    if (!acc[leagueKey]) acc[leagueKey] = [];
+    acc[leagueKey].push(match);
+    return acc;
+  }, {});
 }
-
-
