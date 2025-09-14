@@ -15,6 +15,7 @@ const redisClient = createClient({
 });
 redisClient.on("error", (err) => console.error("Redis Client Error", err));
 await redisClient.connect();
+
 console.log("✅ Connected to Redis");
 
 const API_HEADERS = {
@@ -23,8 +24,8 @@ const API_HEADERS = {
 };
 
 // ---------------- CACHE DURATIONS ----------------
-const TTL_TODAY = 24 * 60 * 60; // 24h
-const TTL_LIVE = 60; // 1 min
+const TTL_TODAY =  24 * 60 * 60; // 24h
+const TTL_LIVE = 60*1; // 1 min
 const TTL_SCHEDULE = 12 * 60 * 60; // 12h
 const TTL_MATCHES = 30 * 60; // 30 min
 
@@ -64,7 +65,7 @@ app.get("/live", async (req, res) => {
   const cacheKey = "live:all";
   const matches = await getFromCacheOrFetch(cacheKey, TTL_LIVE, async () => {
     const response = await axios.get(
-      "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all",
+      "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=39-140-135-78-61-3-4-2-94-288-203-200-313",
       { headers: API_HEADERS }
     );
     return response.data.response;
@@ -83,12 +84,19 @@ app.get("/today", async (req, res) => {
     );
     return response.data.response;
   });
-  res.json(matches);
+  const filteredMatches = filterPreferredLeagues(matches)
+  res.json(filteredMatches);
 });
+// filtering matches
+function filterPreferredLeagues(matches) { // 39-140-135-78-61-3-4-2-94
+  const preferredLeagues = [39, 140, 78, 135, 61, 3, 4, 2, 94, 253, 313, 200, 288, 203];
+  return matches.filter(match => preferredLeagues.includes(match.league.id));
+}
+
 
 // 🟡 Tomorrow’s schedule (cached 12h)
 app.get("/schedule", async (req, res) => {
-  const tomorrow = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000)
+  const tomorrow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
   const cacheKey = `schedule:${tomorrow}`;
@@ -99,7 +107,8 @@ app.get("/schedule", async (req, res) => {
     );
     return response.data.response;
   });
-  res.json(matches);
+  const filteredMatches = filterPreferredLeagues(matches)
+  res.json(filteredMatches);
 });
 
 // 🔍 Search fixtures by team name (cached 30m)
