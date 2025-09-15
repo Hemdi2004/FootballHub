@@ -16,11 +16,11 @@ const preferredLeagues = [
   { id: 61, name: "Ligue 1" },
   { id: 3, name: "Eredivisie" },
   { id: 4, name: "Primeira Liga" },
-  { id: 2, name: "Championship" },
+  { id: 2, name: "Champions League" },
   { id: 288, name: "Saudi Pro League" },
   { id: 203, name: "Turkish Super Lig" },
   { id: 200, name: "Botola Pro League" }
-];
+]; //39, 140, 78, 135, 61, 3, 4, 2, 94, 253, 313, 200, 288, 203
 
 // ---------------- INIT ----------------
 document.addEventListener("DOMContentLoaded", async () => {
@@ -30,13 +30,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     checkbox.type = "checkbox";
     checkbox.id = `league-${league.id}`;
     checkbox.value = league.id;
-    checkbox.checked = true;
-    checkbox.className = "mr-1";
+    checkbox.checked = false;
+    checkbox.className = "form-checkbox text-blue-600 rounded focus:ring-blue-500";
 
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.innerText = league.name;
-    label.className = "mr-3";
+    label.className = "ml-2 text-gray-700";
 
     filterContainer.appendChild(checkbox);
     filterContainer.appendChild(label);
@@ -58,7 +58,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Listen for filter changes
   filterContainer.addEventListener("change", applyLeagueFilter);
-
+  
+  // Show filter List
+   showFilterList()
   // Search form
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -72,6 +74,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
+// toggling filter list
+
+function showFilterList() {
+  // ---------------- COLLAPSIBLE FILTER ----------------
+const toggleBtn = document.getElementById("toggleFilterBtn");
+const filterWrapper = document.getElementById("filterWrapper");
+const filterBtnText = document.getElementById("filterBtnText");
+
+toggleBtn.addEventListener("click", () => {
+  const isHidden = filterWrapper.classList.contains("hidden");
+
+  if (isHidden) {
+    filterWrapper.classList.remove("hidden");
+    filterBtnText.innerText = "Hide Filters";
+  } else {
+    filterWrapper.classList.add("hidden");
+    filterBtnText.innerText = "Show Filters";
+  }
+});
+
+}
 // ---------------- FETCH HELPERS ----------------
 async function fetchMatches(query) {
   if (!query) return [];
@@ -129,14 +152,21 @@ async function loadSchedule() {
 }
 
 // ---------------- LEAGUE FILTER ----------------
+
 function applyLeagueFilter() {
   const checkedLeagues = Array.from(
     filterContainer.querySelectorAll("input[type='checkbox']:checked")
   ).map(cb => parseInt(cb.value));
 
-  const filtered = currentMatches.filter(match =>
-    checkedLeagues.includes(match.league.id)
-  );
+  let filtered;
+  if (checkedLeagues.length === 0) {
+    // Fallback: show all matches if nothing is checked
+    filtered = currentMatches;
+  } else {
+    filtered = currentMatches.filter(match =>
+      checkedLeagues.includes(match.league.id)
+    );
+  }
 
   populateTable(filtered);
 }

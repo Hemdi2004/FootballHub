@@ -9,36 +9,65 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="./js/main.js" defer></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <!-- Header -->
-  <header class="bg-blue-600 text-white shadow-md">
-    <div class="container w-full max-w-[1400px] mx-auto px-4 py-4 flex justify-between items-center">
-      <!-- Logo / Site name -->
-      <a href="index.html" class="text-2xl font-bold text-white">Football<span style="color: rgb(255, 187, 1);">Hub</span></a>
+<body style="" class="bg-gray-50 text-gray-800">
+<!-- Header -->
+<header class="bg-blue-600 text-white shadow-md">
+  <div class="container w-full max-w-[1400px] mx-auto px-4 py-4 flex items-center justify-between">
+    
+    <!-- Left side (Logo + Nav together) -->
+    <div class="flex items-center space-x-12">
+      <!-- Logo -->
+      <a href="index.html" class="text-2xl font-bold text-white">
+        Football<span class="text-yellow-400">Hub</span>
+      </a>
+
       <!-- Navigation -->
-      <nav class="space-x-6 hidden md:flex">
-        <a href="#" data-action="home" class="nav-home hover:text-orange-300   transition">Home</a>
-        <a href="#" data-action="live" class="nav-live hover:text-orange-300   transition">Live Matches</a>
-        <a href="#" data-action="schedule" class="nav-schedule hover:text-orange-300   transition">Schedule</a>
-        <a href="#" class="hover:text-orange-300   transition">Contact</a>
+      <nav class="hidden md:flex space-x-8">
+        <a href="#" data-action="home" class="hover:text-orange-300 transition">Home</a>
+        <a href="#" data-action="live" class="hover:text-orange-300 transition">Live Matches</a>
+        <a href="#" data-action="schedule" class="hover:text-orange-300 transition">Schedule</a>
+        <a href="#" class="hover:text-orange-300 transition">Contact</a>
       </nav>
-
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-button" class="md:hidden focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-        </svg>
-      </button>
     </div>
-  </header>
 
-  <!-- Mobile menu (hidden by default) -->
-  <nav id="mobile-menu" class="bg-white shadow-md hidden px-4 py-2 md:hidden">
-    <a href="#" data-action="home" class="nav-home block py-2 border-b border-gray-200 hover:text-blue-600">Home</a>
-    <a href="#" data-action="live" class="nav-live block py-2 border-b border-gray-200 hover:text-blue-600">Live Matches</a>
-    <a href="#" data-action="schedule" class="nav-schedule block py-2 border-b border-gray-200 hover:text-blue-600">Schedule</a>
-    <a href="#" class="block py-2 hover:text-blue-600">Contact</a>
-  </nav>
+<!-- Right Side Utilities -->
+<div class="hidden md:flex items-center gap-4">
+  
+  <!-- Upcoming feature links -->
+  <div class="flex items-center gap-8 mr-4">
+    <a href="#" class="hover:text-orange-300 transition">Lorem</a>
+    <a href="#" class="hover:text-orange-300 transition">Ipsum</a>
+    <a href="#" class="hover:text-orange-300 transition">Slowest</a>
+  </div>
+
+  <!-- Theme toggle -->
+  <button id="themeToggle" class="p-2 rounded-full bg-white text-blue-600 hover:bg-gray-100 transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
+         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" 
+            d="M12 3v1m0 16v1m8.66-12.66l-.71.71M4.05 19.95l.71-.71M21 12h1M2 12H1m15.95 7.95l-.71-.71M4.76 4.76l-.71.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+    </svg>
+  </button>
+
+  <!-- Language selector -->
+  <select id="languageSelect" class="bg-blue-600 border border-white rounded px-2 py-1 text-white hover:bg-blue-700 cursor-pointer">
+    <option value="en">EN</option>
+    <option value="fr">FR</option>
+    <option value="ar">AR</option>
+  </select>
+</div>
+
+
+    <!-- Mobile menu button -->
+    <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" 
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M4 8h16M4 16h16" />
+      </svg>
+    </button>
+  </div>
+</header>
 
 <!-- search bar -->
 <form id="searchForm" 
@@ -58,13 +87,26 @@
   </button>
 </form>
 
-<div id="league-filter" class="flex flex-wrap gap-2 mb-4 px-4">
-  <!-- Checkboxes will be dynamically generated -->
+
+<div class="container mx-auto px-4 py-6">
+<button id="toggleFilterBtn" 
+  class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+  <!-- Filter Icon -->
+  <svg xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 text-white" 
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" 
+      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 019 18v-4.586L3.293 6.707A1 1 0 013 6V4z" />
+  </svg>
+  <span id="filterBtnText">Show Filters</span>
+</button>
+
+<div id="filterWrapper" 
+  class="mt-3 hidden border border-gray-200 rounded-lg p-4 bg-white shadow-lg">
+  <div id="league-filter" class="flex flex-wrap gap-3"></div>
 </div>
 
 
-<div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold mb-4 text-green-500"></h2>
     <div class="overflow-x-auto">
     <table class="min-w-full border border-gray-200 rounded-md shadow-md">
      <thead>
