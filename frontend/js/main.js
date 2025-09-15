@@ -1,39 +1,74 @@
+// ---------------- ELEMENTS ----------------
 const form = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const tableBody = document.getElementById("matchesTableBody");
+const filterContainer = document.getElementById("league-filter");
 
+// ---------------- GLOBAL STATE ----------------
+let currentMatches = []; // store last fetched matches
+
+// ---------------- LEAGUES ----------------
+const preferredLeagues = [
+  { id: 39, name: "Premier League" },
+  { id: 140, name: "La Liga" },
+  { id: 78, name: "Bundesliga" },
+  { id: 135, name: "Serie A" },
+  { id: 61, name: "Ligue 1" },
+  { id: 3, name: "Eredivisie" },
+  { id: 4, name: "Primeira Liga" },
+  { id: 2, name: "Championship" },
+  { id: 288, name: "Saudi Pro League" },
+  { id: 203, name: "Turkish Super Lig" },
+  { id: 200, name: "Botola Pro League" }
+];
 
 // ---------------- INIT ----------------
 document.addEventListener("DOMContentLoaded", async () => {
-  // Load today's matches on first open
-  const todayMatches = await loadToday();
-  if (!todayMatches || todayMatches.length === 0) {
-    populateTable(defaultMatches); // fallback only if nothing comes back
-  }
+  // Render filter checkboxes
+  preferredLeagues.forEach(league => {
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `league-${league.id}`;
+    checkbox.value = league.id;
+    checkbox.checked = true;
+    checkbox.className = "mr-1";
 
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.innerText = league.name;
+    label.className = "mr-3";
+
+    filterContainer.appendChild(checkbox);
+    filterContainer.appendChild(label);
+  });
+
+  // Load today's matches initially
+  await loadToday();
+
+  // Listen for nav clicks
   document.addEventListener("click", (e) => {
-  const action = e.target.dataset.action;
-  if (!action) return;
+    const action = e.target.dataset.action;
+    if (!action) return;
+    e.preventDefault();
 
-  e.preventDefault();
+    if (action === "home") loadToday();
+    if (action === "live") loadLive();
+    if (action === "schedule") loadSchedule();
+  });
 
-  if (action === "home") loadToday();
-  if (action === "live") loadLive();
-  if (action === "schedule") loadSchedule();
-});
+  // Listen for filter changes
+  filterContainer.addEventListener("change", applyLeagueFilter);
 
-
-  // Search form handler
+  // Search form
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const teamName = searchInput.value.trim();
     if (!teamName) return;
 
     const matches = await fetchMatches(teamName);
-    const sortedMatches = matches.sort(
-      (a, b) => a.fixture.timestamp - b.fixture.timestamp
-    );
-    populateTable(sortedMatches);
+    currentMatches = matches;
+    const sortedMatches = matches.sort((a, b) => a.fixture.timestamp - b.fixture.timestamp);
+    applyLeagueFilter();
   });
 });
 
@@ -42,9 +77,7 @@ async function fetchMatches(query) {
   if (!query) return [];
 
   try {
-    const response = await fetch(
-      `http://localhost:4000/matches?query=${encodeURIComponent(query)}`
-    );
+    const response = await fetch(`http://localhost:4000/matches?query=${encodeURIComponent(query)}`);
     if (!response.ok) throw new Error("Failed to fetch team matches");
     return await response.json();
   } catch (error) {
@@ -58,7 +91,8 @@ async function loadToday() {
     const res = await fetch("http://localhost:4000/today");
     if (!res.ok) throw new Error("Failed to fetch today's matches");
     const matches = await res.json();
-    populateTable(matches);
+    currentMatches = matches;
+    applyLeagueFilter();
     return matches;
   } catch (err) {
     console.error("Error in loadToday:", err);
@@ -71,7 +105,8 @@ async function loadLive() {
     const res = await fetch("http://localhost:4000/live");
     if (!res.ok) throw new Error("Failed to fetch live matches");
     const matches = await res.json();
-    populateTable(matches);
+    currentMatches = matches;
+    applyLeagueFilter();
     return matches;
   } catch (err) {
     console.error("Error in loadLive:", err);
@@ -84,7 +119,8 @@ async function loadSchedule() {
     const res = await fetch("http://localhost:4000/schedule");
     if (!res.ok) throw new Error("Failed to fetch schedule");
     const matches = await res.json();
-    populateTable(matches);
+    currentMatches = matches;
+    applyLeagueFilter();
     return matches;
   } catch (err) {
     console.error("Error in loadSchedule:", err);
@@ -92,7 +128,20 @@ async function loadSchedule() {
   }
 }
 
-// ---------------- RENDERING ----------------
+// ---------------- LEAGUE FILTER ----------------
+function applyLeagueFilter() {
+  const checkedLeagues = Array.from(
+    filterContainer.querySelectorAll("input[type='checkbox']:checked")
+  ).map(cb => parseInt(cb.value));
+
+  const filtered = currentMatches.filter(match =>
+    checkedLeagues.includes(match.league.id)
+  );
+
+  populateTable(filtered);
+}
+
+// ---------------- TABLE RENDERING ----------------
 function populateTable(matches) {
   if (!matches || matches.length === 0) {
     tableBody.innerHTML =
@@ -103,7 +152,7 @@ function populateTable(matches) {
   const grouped = groupMatchesByLeague(matches);
   tableBody.innerHTML = "";
 
-  Object.keys(grouped).forEach((leagueKey) => {
+  Object.keys(grouped).forEach(leagueKey => {
     // League header
     const headerRow = document.createElement("tr");
     headerRow.innerHTML = `
@@ -114,12 +163,10 @@ function populateTable(matches) {
     tableBody.appendChild(headerRow);
 
     // Matches
-    grouped[leagueKey].forEach((match) => {
+    grouped[leagueKey].forEach(match => {
       const row = document.createElement("tr");
       row.className = "border-b hover:bg-blue-100 cursor-pointer h-20";
-      row.onclick = () => {
-        location.href = "index.html";
-      };
+      row.onclick = () => location.href = "index.html";
 
       row.innerHTML = `
         <td class="py-3 px-6 text-center"><img src="${match.league.logo}" alt="league-logo" class="w-8 h-8 object-contain"/></td>
@@ -172,9 +219,7 @@ function getMatchScore(score) {
 
 function renderMinutes(status) {
   if (status.elapsed == null) return "-";
-  return status.extra != null
-    ? `${status.elapsed}+${status.extra}'`
-    : `${status.elapsed}'`;
+  return status.extra != null ? `${status.elapsed}+${status.extra}'` : `${status.elapsed}'`;
 }
 
 function groupMatchesByLeague(matches) {
