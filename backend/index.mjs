@@ -44,6 +44,8 @@ async function getFromCacheOrFetch(cacheKey, ttl, fetchFn) {
   return fresh || [];
 }
 
+
+
 // ---------------- TEAM LOOKUP ----------------
 async function getTeamIdByName(name) {
   try {
@@ -65,7 +67,7 @@ app.get("/live", async (req, res) => {
   const cacheKey = "live:all";
   const matches = await getFromCacheOrFetch(cacheKey, TTL_LIVE, async () => {
     const response = await axios.get(
-      "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=39-140-135-78-61-3-4-2-94-288-203-200-313",
+      "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=39-140-135-78-61-3-4-2-94-203-200-313",
       { headers: API_HEADERS }
     );
     return response.data.response;
@@ -89,7 +91,7 @@ app.get("/today", async (req, res) => {
 });
 // filtering matches
 function filterPreferredLeagues(matches) { // 39-140-135-78-61-3-4-2-94
-  const preferredLeagues = [39, 140, 78, 135, 61, 3, 4, 2, 94, 253, 313, 200, 288, 203];
+  const preferredLeagues = [39, 140, 78, 135, 61, 3, 4, 2, 94, 253, 313, 200, 203, 8];
   return matches.filter(match => preferredLeagues.includes(match.league.id));
 }
 

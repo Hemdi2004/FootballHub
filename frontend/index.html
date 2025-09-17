@@ -21,42 +21,36 @@
         Football<span class="text-yellow-400">Hub</span>
       </a>
 
-      <!-- Navigation -->
+      <!-- Navigation (desktop only) -->
       <nav class="hidden md:flex space-x-8">
         <a href="#" data-action="home" class="hover:text-orange-300 transition">Home</a>
         <a href="#" data-action="live" class="hover:text-orange-300 transition">Live Matches</a>
         <a href="#" data-action="schedule" class="hover:text-orange-300 transition">Schedule</a>
         <a href="#" class="hover:text-orange-300 transition">Contact</a>
+        <a href="#" class="hover:text-orange-300 transition">Lorem</a>
+        <a href="#" class="hover:text-orange-300 transition">Ipsum</a>
+        <a href="#" class="hover:text-orange-300 transition">Slowest</a>
       </nav>
     </div>
 
-<!-- Right Side Utilities -->
-<div class="hidden md:flex items-center gap-4">
-  
-  <!-- Upcoming feature links -->
-  <div class="flex items-center gap-8 mr-4">
-    <a href="#" class="hover:text-orange-300 transition">Lorem</a>
-    <a href="#" class="hover:text-orange-300 transition">Ipsum</a>
-    <a href="#" class="hover:text-orange-300 transition">Slowest</a>
-  </div>
+    <!-- Middle utilities: Theme + Language -->
+    <div class="flex items-center gap-3">
+      <!-- Theme toggle -->
+      <button id="themeToggle" class="p-2 rounded-full bg-white text-blue-600 hover:bg-gray-100 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M12 3v1m0 16v1m8.66-12.66l-.71.71M4.05 19.95l.71-.71M21 12h1M2 12H1m15.95 7.95l-.71-.71M4.76 4.76l-.71.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+      </button>
 
-  <!-- Theme toggle -->
-  <button id="themeToggle" class="p-2 rounded-full bg-white text-blue-600 hover:bg-gray-100 transition">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
-         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" 
-            d="M12 3v1m0 16v1m8.66-12.66l-.71.71M4.05 19.95l.71-.71M21 12h1M2 12H1m15.95 7.95l-.71-.71M4.76 4.76l-.71.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-    </svg>
-  </button>
-
-  <!-- Language selector -->
-  <select id="languageSelect" class="bg-blue-600 border border-white rounded px-2 py-1 text-white hover:bg-blue-700 cursor-pointer">
-    <option value="en">EN</option>
-    <option value="fr">FR</option>
-    <option value="ar">AR</option>
-  </select>
-</div>
-
+      <!-- Language selector -->
+      <select id="languageSelect" class="bg-blue-600 border border-white rounded px-2 py-1 text-white hover:bg-blue-700 cursor-pointer">
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+        <option value="ar">AR</option>
+      </select>
+    </div>
 
     <!-- Mobile menu button -->
     <button id="mobile-menu-button" class="md:hidden focus:outline-none">
@@ -68,6 +62,17 @@
     </button>
   </div>
 </header>
+
+<!-- Mobile menu (hidden by default) -->
+<nav id="mobile-menu" class="md:hidden hidden bg-white text-gray-800 shadow-lg px-4 py-4 space-y-2 rounded-b-lg">
+  <a href="#" data-action="home" class="block hover:text-orange-300 transition">Home</a>
+  <a href="#" data-action="live" class="block hover:text-orange-300 transition">Live Matches</a>
+  <a href="#" data-action="schedule" class="block hover:text-orange-300 transition">Schedule</a>
+  <a href="#" class="block hover:text-orange-300 transition">Contact</a>
+  <a href="#" class="block hover:text-orange-300 transition">Lorem</a>
+  <a href="#" class="block hover:text-orange-300 transition">Ipsum</a>
+  <a href="#" class="block hover:text-orange-300 transition">Slowest</a>
+</nav>
 
 <!-- search bar -->
 <form id="searchForm" 
@@ -90,16 +95,17 @@
 
 <div class="container mx-auto px-4 py-6">
 <button id="toggleFilterBtn" 
-  class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+  class="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-300 hover:to-blue-600 text-white px-4 py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
   <!-- Filter Icon -->
   <svg xmlns="http://www.w3.org/2000/svg" 
-        class="h-5 w-5 text-white" 
+        class="h-5 w-5" 
         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
     <path stroke-linecap="round" stroke-linejoin="round" 
       d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 019 18v-4.586L3.293 6.707A1 1 0 013 6V4z" />
   </svg>
   <span id="filterBtnText">Show Filters</span>
 </button>
+
 
 <div id="filterWrapper" 
   class="mt-3 hidden border border-gray-200 rounded-lg p-4 bg-white shadow-lg">

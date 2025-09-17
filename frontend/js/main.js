@@ -17,9 +17,9 @@ const preferredLeagues = [
   { id: 3, name: "Eredivisie" },
   { id: 4, name: "Primeira Liga" },
   { id: 2, name: "Champions League" },
-  { id: 288, name: "Saudi Pro League" },
   { id: 203, name: "Turkish Super Lig" },
-  { id: 200, name: "Botola Pro League" }
+  { id: 200, name: "Botola Pro League   " },
+  { id: 253, name: "MLS" }
 ]; //39, 140, 78, 135, 61, 3, 4, 2, 94, 253, 313, 200, 288, 203
 
 // ---------------- INIT ----------------
